@@ -124,6 +124,13 @@
             font-size: 1.1em;
             color: #00d4ff;
         }
+        
+        canvas {
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -131,7 +138,7 @@
         <h1>⚡ AIR HOCKEY ⚡</h1>
         
         <div class="menu" id="menu">
-            <img src="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey-Logo2.png" alt="Air Hockey Logo" class="game-logo">
+            <img src="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Favicon-Logo.png" alt="Air Hockey Logo" class="game-logo">
             <h2>Ready to Play?</h2>
             <button onclick="startGame()">START GAME</button>
         </div>
@@ -154,7 +161,7 @@
 
         <div class="controls" id="controls">
             <div class="instructions">
-                Move your mouse to control your paddle
+                Move your mouse or touch the blue paddle to control it
             </div>
             <button class="btn" onclick="backToMenu()">Back to Menu</button>
         </div>
@@ -523,6 +530,58 @@
             lastMouseX = newX;
             lastMouseY = newY;
         });
+        
+        // Touch control for mobile
+        let touchActive = false;
+        
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            
+            // Check if touching the player paddle
+            const dx = touchX - player.x;
+            const dy = touchY - player.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < player.radius + 20) {
+                touchActive = true;
+                lastMouseX = touchX;
+                lastMouseY = touchY;
+            }
+        }, { passive: false });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!touchActive) return;
+            
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const newX = touch.clientX - rect.left;
+            const newY = touch.clientY - rect.top;
+            
+            // Calculate velocity for momentum transfer
+            player.vx = (newX - lastMouseX) * 0.5;
+            player.vy = (newY - lastMouseY) * 0.5;
+            
+            player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, newX));
+            player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, newY));
+            
+            lastMouseX = newX;
+            lastMouseY = newY;
+        }, { passive: false });
+        
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchActive = false;
+        }, { passive: false });
+        
+        canvas.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            touchActive = false;
+        }, { passive: false });
     </script>
 </body>
 </html>
