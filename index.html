@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Air Hockey</title>
     <link rel="icon" type="image/png" href="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Favicon-Logo.png">
     <style>
@@ -10,13 +10,14 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
+            touch-action: none;
         }
 
         body {
@@ -24,7 +25,8 @@
             background: #0a0e27;
             color: white;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
@@ -32,125 +34,116 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            position: relative;
-        }
-
-        /* Fullscreen Menu */
-        .menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 39, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            z-index: 100;
-            padding: 20px;
+            justify-content: center;
         }
 
-        .game-title {
-            font-size: 3em;
+        /* Menu Styling */
+        .menu {
+            text-align: center;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            border: 2px solid #00d4ff;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
             color: #00d4ff;
             text-shadow: 0 0 20px #00d4ff;
-            margin-bottom: 30px;
-            text-align: center;
         }
 
         .game-logo {
-            width: 150px;
+            width: 120px;
             height: auto;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
         }
 
         .menu h2 {
-            font-size: 1.8em;
-            margin-bottom: 40px;
-            color: #fff;
+            margin-bottom: 30px;
+            font-size: 1.4em;
         }
 
         .menu button {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
             border: none;
-            padding: 20px 50px;
-            font-size: 1.4em;
+            padding: 20px 40px;
+            font-size: 1.2em;
             border-radius: 12px;
             cursor: pointer;
-            margin: 15px;
+            margin: 20px 0;
             font-weight: bold;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
-            width: 80%;
-            max-width: 300px;
+            width: 100%;
         }
 
         .menu button:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
             box-shadow: 0 2px 10px rgba(0, 212, 255, 0.6);
         }
 
-        /* Game Interface - Fullscreen */
+        /* Game Canvas - FULLSCREEN */
         #gameCanvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: #1a1f3a;
+            display: none;
             touch-action: none;
         }
 
-        /* Scoreboard - Fixed Position */
+        /* Scoreboard - Always visible during game */
         .scoreboard {
-            position: fixed;
-            top: 10px;
-            left: 0;
-            width: 100%;
             display: none;
             justify-content: space-around;
-            padding: 10px 20px;
+            width: 100%;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(10, 14, 39, 0.8);
             backdrop-filter: blur(5px);
         }
 
         .score-item {
             background: rgba(0, 212, 255, 0.2);
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 12px;
             border: 2px solid #00d4ff;
-            min-width: 100px;
             text-align: center;
             font-size: 1.5em;
             font-weight: bold;
+            min-width: 100px;
         }
 
         .score-label {
-            font-size: 0.6em;
+            font-size: 0.7em;
             color: #00d4ff;
             margin-bottom: 5px;
         }
 
-        /* Game Controls */
-        .game-controls {
+        /* Controls */
+        .controls {
+            display: none;
             position: fixed;
-            bottom: 0;
+            bottom: 20px;
             left: 0;
             width: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+            text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
         }
 
-        .back-btn {
+        .btn {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
@@ -158,100 +151,17 @@
             font-size: 1.1em;
             border-radius: 10px;
             cursor: pointer;
-            margin-top: 15px;
             font-weight: bold;
-            width: 80%;
-            max-width: 250px;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .back-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Mobile D-Pad Controls */
-        .mobile-controls {
-            position: fixed;
-            bottom: 100px;
-            left: 0;
-            width: 100%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            padding: 20px;
-        }
-
-        .dpad-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            gap: 10px;
-            width: 200px;
-            height: 200px;
-        }
-
-        .dpad-btn {
-            background: rgba(0, 212, 255, 0.3);
-            border: 2px solid #00d4ff;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 2em;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .dpad-btn:active {
-            background: rgba(0, 212, 255, 0.7);
+        .btn:active {
             transform: scale(0.95);
         }
 
-        .center-cell {
-            grid-column: 2;
-            grid-row: 2;
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .up {
-            grid-column: 2;
-            grid-row: 1;
-        }
-
-        .left {
-            grid-column: 1;
-            grid-row: 2;
-        }
-
-        .right {
-            grid-column: 3;
-            grid-row: 2;
-        }
-
-        .down {
-            grid-column: 2;
-            grid-row: 3;
-        }
-
-        /* Instructions */
-        .instructions {
-            position: fixed;
-            top: 100px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: #00d4ff;
-            font-size: 1.1em;
-            padding: 10px 20px;
-            z-index: 10;
-            display: none;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        /* Winner Screen */
-        .winner-screen {
+        /* Game Over Screen */
+        .game-over {
             position: fixed;
             top: 0;
             left: 0;
@@ -263,174 +173,114 @@
             justify-content: center;
             align-items: center;
             z-index: 20;
-            padding: 20px;
         }
 
-        .winner-text {
-            font-size: 3.5em;
-            font-weight: bold;
+        .game-over h2 {
+            font-size: 3em;
             margin-bottom: 20px;
             text-align: center;
         }
 
-        .winner-score {
-            font-size: 2.5em;
+        .game-over p {
+            font-size: 2em;
             margin-bottom: 30px;
             color: #00d4ff;
         }
 
-        .winner-buttons {
+        .game-over-buttons {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
-        .winner-btn {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            min-width: 140px;
-        }
-
-        .play-again {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-        }
-
-        .main-menu {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-
-        /* Fullscreen toggle button */
-        .fullscreen-btn {
+        /* Instructions */
+        .instructions {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 212, 255, 0.3);
-            border: 2px solid #00d4ff;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2em;
-            z-index: 30;
-            cursor: pointer;
-        }
-
-        /* Landscape warning */
-        .landscape-warning {
-            position: fixed;
-            top: 0;
+            bottom: 80px;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: #0a0e27;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
             text-align: center;
-        }
-
-        .landscape-warning h2 {
             color: #00d4ff;
-            margin-bottom: 20px;
+            font-size: 1em;
+            padding: 10px;
+            z-index: 10;
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        .landscape-warning p {
-            font-size: 1.2em;
-            color: white;
-        }
-
-        /* Media queries for different orientations */
-        @media (orientation: portrait) and (max-height: 600px) {
-            .menu h2 {
-                font-size: 1.4em;
-                margin-bottom: 20px;
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .menu {
+                width: 95%;
+                padding: 15px;
             }
             
-            .game-logo {
-                width: 100px;
-                margin-bottom: 20px;
-            }
-            
-            .menu button {
-                padding: 15px 30px;
-                font-size: 1.2em;
-            }
-        }
-
-        @media (orientation: landscape) and (max-height: 500px) {
-            .scoreboard {
-                top: 5px;
-                padding: 5px 10px;
+            h1 {
+                font-size: 1.8em;
             }
             
             .score-item {
-                padding: 5px 10px;
-                min-width: 70px;
-                font-size: 1.2em;
+                padding: 10px 20px;
+                min-width: 80px;
+                font-size: 1.3em;
             }
             
-            .mobile-controls {
-                bottom: 60px;
+            .game-over h2 {
+                font-size: 2.5em;
             }
             
-            .dpad-container {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .game-controls {
-                padding: 10px;
+            .game-over p {
+                font-size: 1.8em;
             }
         }
 
         @media (max-width: 480px) {
-            .game-title {
-                font-size: 2.2em;
+            h1 {
+                font-size: 1.5em;
             }
             
-            .winner-text {
-                font-size: 2.5em;
+            .menu h2 {
+                font-size: 1.2em;
             }
             
-            .winner-score {
+            .menu button {
+                padding: 18px 30px;
+                font-size: 1.1em;
+            }
+            
+            .score-item {
+                padding: 8px 15px;
+                min-width: 70px;
+                font-size: 1.2em;
+            }
+            
+            .game-over h2 {
                 font-size: 2em;
+            }
+            
+            .game-over p {
+                font-size: 1.5em;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1em;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Landscape Warning -->
-    <div class="landscape-warning" id="landscapeWarning">
-        <div>
-            <h2>📱 Rotate Your Phone</h2>
-            <p>For the best experience, please rotate your device to landscape mode.</p>
-        </div>
-    </div>
-
-    <!-- Fullscreen Button -->
-    <div class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⤢</div>
-
     <div class="container">
         <!-- Main Menu -->
         <div class="menu" id="menu">
-            <h1 class="game-title">⚡ AIR HOCKEY ⚡</h1>
             <img src="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Favicon-Logo.png" alt="Air Hockey Logo" class="game-logo">
-            <h2>Ready for Fullscreen Action?</h2>
+            <h1>⚡ AIR HOCKEY ⚡</h1>
+            <h2>Touch to Play!</h2>
             <button onclick="startGame()">START GAME</button>
-            <div style="margin-top: 30px; color: #00d4ff; font-size: 0.9em;">
-                Touch the blue paddle or use D-Pad to play
-            </div>
+            <p style="margin-top: 20px; color: #00d4ff; font-size: 0.9em;">
+                Touch and drag the blue paddle to control it
+            </p>
         </div>
 
         <!-- Canvas -->
@@ -453,32 +303,21 @@
 
         <!-- Instructions -->
         <div class="instructions" id="instructions">
-            Touch the blue paddle or use D-Pad to control your player
-        </div>
-
-        <!-- Mobile Controls -->
-        <div class="mobile-controls" id="mobileControls">
-            <div class="dpad-container">
-                <div class="dpad-btn center-cell"></div>
-                <div class="dpad-btn up" ontouchstart="moveUp()" ontouchend="stopVertical()">↑</div>
-                <div class="dpad-btn left" ontouchstart="moveLeft()" ontouchend="stopHorizontal()">←</div>
-                <div class="dpad-btn right" ontouchstart="moveRight()" ontouchend="stopHorizontal()">→</div>
-                <div class="dpad-btn down" ontouchstart="moveDown()" ontouchend="stopVertical()">↓</div>
-            </div>
+            Touch and drag the blue paddle to control it
         </div>
 
         <!-- Game Controls -->
-        <div class="game-controls" id="gameControls">
-            <button class="back-btn" onclick="backToMenu()">BACK TO MENU</button>
+        <div class="controls" id="controls">
+            <button class="btn" onclick="backToMenu()">Back to Menu</button>
         </div>
 
-        <!-- Winner Screen -->
-        <div class="winner-screen" id="winnerScreen">
-            <div class="winner-text" id="winnerText">YOU WIN!</div>
-            <div class="winner-score" id="winnerScore">7 - 0</div>
-            <div class="winner-buttons">
-                <button class="winner-btn play-again" onclick="playAgain()">PLAY AGAIN</button>
-                <button class="winner-btn main-menu" onclick="backToMenu()">MAIN MENU</button>
+        <!-- Game Over Screen -->
+        <div class="game-over" id="gameOver">
+            <h2 id="gameOverTitle">YOU WIN!</h2>
+            <p id="gameOverScore">7 - 0</p>
+            <div class="game-over-buttons">
+                <button class="btn" onclick="playAgain()">Play Again</button>
+                <button class="btn" onclick="backToMenu()">Main Menu</button>
             </div>
         </div>
     </div>
@@ -492,19 +331,18 @@
         let playerScore = 0;
         let aiScore = 0;
         let waitingForReset = false;
-        let isFullscreen = false;
+        
+        // Game dimensions - will be set to full screen
+        let WIDTH, HEIGHT, GOAL_X;
+        const GOAL_WIDTH = 200;
         
         // Game objects
-        let WIDTH, HEIGHT, GOAL_X, GOAL_WIDTH = 200;
-        const PUCK_RADIUS = 20;
-        const PADDLE_RADIUS = 40;
-        
         const puck = {
             x: 0,
             y: 0,
             vx: 0,
             vy: 0,
-            radius: PUCK_RADIUS,
+            radius: 20,
             mass: 1
         };
         
@@ -513,8 +351,7 @@
             y: 0,
             vx: 0,
             vy: 0,
-            radius: PADDLE_RADIUS,
-            speed: 12
+            radius: 40
         };
         
         const ai = {
@@ -522,39 +359,22 @@
             y: 0,
             vx: 0,
             vy: 0,
-            radius: PADDLE_RADIUS,
-            speed: 8,
-            reactionDelay: 0
+            radius: 40,
+            reactDelay: 0
         };
         
-        // Mobile control state
-        let moveLeftActive = false;
-        let moveRightActive = false;
-        let moveUpActive = false;
-        let moveDownActive = false;
-        let isTouchingPaddle = false;
-        let touchStartX = 0;
-        let touchStartY = 0;
+        // Touch state
+        let touchActive = false;
+        let lastTouchX = 0;
+        let lastTouchY = 0;
         
-        // Audio
+        // Background music
         const bgMusic = new Audio('https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Song.mp3');
         bgMusic.loop = true;
         bgMusic.volume = 0.3;
         
-        // Initialize game
-        function initGame() {
-            updateCanvasSize();
-            resetPositions();
-            
-            // Request fullscreen on mobile devices
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                setTimeout(() => {
-                    document.documentElement.requestFullscreen?.().catch(e => console.log('Fullscreen error:', e));
-                }, 500);
-            }
-        }
-        
-        function updateCanvasSize() {
+        // Initialize canvas size
+        function initCanvas() {
             WIDTH = window.innerWidth;
             HEIGHT = window.innerHeight;
             
@@ -564,16 +384,11 @@
             GOAL_X = (WIDTH - GOAL_WIDTH) / 2;
             
             // Adjust sizes based on screen
-            puck.radius = Math.max(15, Math.min(25, WIDTH / 40));
-            player.radius = Math.max(30, Math.min(50, WIDTH / 20));
+            puck.radius = Math.max(15, Math.min(25, WIDTH / 30));
+            player.radius = Math.max(35, Math.min(50, WIDTH / 15));
             ai.radius = player.radius;
             
-            if (gameRunning) {
-                resetPositions();
-            }
-        }
-        
-        function resetPositions() {
+            // Reset positions
             player.x = WIDTH / 2;
             player.y = HEIGHT - 100;
             ai.x = WIDTH / 2;
@@ -583,22 +398,18 @@
         }
         
         function startGame() {
-            initGame();
-            
-            // Hide menu, show game elements
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById('scoreboard').style.display = 'flex';
-            document.getElementById('gameControls').style.display = 'flex';
-            document.getElementById('instructions').style.display = 'block';
-            document.getElementById('fullscreenBtn').style.display = 'flex';
-            
-            // Show mobile controls on touch devices
-            if ('ontouchstart' in window) {
-                document.getElementById('mobileControls').style.display = 'flex';
-            }
+            // Initialize canvas
+            initCanvas();
             
             // Start background music
             bgMusic.play().catch(e => console.log('Audio play failed:', e));
+            
+            // Show game elements
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('gameCanvas').style.display = 'block';
+            document.getElementById('scoreboard').style.display = 'flex';
+            document.getElementById('controls').style.display = 'block';
+            document.getElementById('instructions').style.display = 'block';
             
             // Reset scores
             playerScore = 0;
@@ -609,9 +420,6 @@
             servePuck();
             gameRunning = true;
             requestAnimationFrame(gameLoop);
-            
-            // Check orientation
-            checkOrientation();
         }
         
         function servePuck() {
@@ -619,8 +427,8 @@
             puck.x = WIDTH / 2;
             puck.y = HEIGHT / 2;
             
-            const angle = (Math.random() - 0.5) * Math.PI / 2;
-            const speed = 8 + Math.random() * 3;
+            const angle = (Math.random() - 0.5) * Math.PI / 2.5;
+            const speed = 7 + Math.random() * 2;
             const direction = Math.random() < 0.5 ? 1 : -1;
             
             puck.vx = Math.sin(angle) * speed;
@@ -632,44 +440,6 @@
             document.getElementById('score2').textContent = aiScore;
         }
         
-        function updateGame() {
-            if (!gameRunning) return;
-            
-            // Update player movement from touch or D-pad
-            updatePlayerMovement();
-            
-            // Update puck
-            updatePuck();
-            
-            // Update AI
-            updateAI();
-        }
-        
-        function updatePlayerMovement() {
-            // Reset velocity
-            player.vx = 0;
-            player.vy = 0;
-            
-            // Apply D-pad controls
-            if (moveLeftActive) player.vx = -player.speed;
-            if (moveRightActive) player.vx = player.speed;
-            if (moveUpActive) player.vy = -player.speed;
-            if (moveDownActive) player.vy = player.speed;
-            
-            // Update position
-            player.x += player.vx;
-            player.y += player.vy;
-            
-            // Keep player in bounds
-            const minX = player.radius + 20;
-            const maxX = WIDTH - player.radius - 20;
-            const minY = HEIGHT / 2 + player.radius + 20;
-            const maxY = HEIGHT - player.radius - 20;
-            
-            player.x = Math.max(minX, Math.min(maxX, player.x));
-            player.y = Math.max(minY, Math.min(maxY, player.y));
-        }
-        
         function updatePuck() {
             if (waitingForReset) return;
             
@@ -677,19 +447,19 @@
             puck.x += puck.vx;
             puck.y += puck.vy;
             
-            // Apply friction
-            puck.vx *= 0.995;
-            puck.vy *= 0.995;
+            // Slight friction
+            puck.vx *= 0.997;
+            puck.vy *= 0.997;
             
-            // Minimum speed
+            // Keep speed above minimum
             const speed = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy);
-            if (speed > 0.1 && speed < 4) {
-                const mult = 4 / speed;
+            if (speed > 0.1 && speed < 5) {
+                const mult = 5 / speed;
                 puck.vx *= mult;
                 puck.vy *= mult;
             }
             
-            // Wall collisions
+            // Side wall bounces
             if (puck.x - puck.radius < 0) {
                 puck.x = puck.radius;
                 puck.vx = Math.abs(puck.vx) * 0.9;
@@ -699,7 +469,7 @@
                 puck.vx = -Math.abs(puck.vx) * 0.9;
             }
             
-            // Top goal/wall
+            // Top goal or wall
             if (puck.y - puck.radius < 0) {
                 if (puck.x > GOAL_X && puck.x < GOAL_X + GOAL_WIDTH) {
                     handleGoal('player');
@@ -709,7 +479,7 @@
                 }
             }
             
-            // Bottom goal/wall
+            // Bottom goal or wall
             if (puck.y + puck.radius > HEIGHT) {
                 if (puck.x > GOAL_X && puck.x < GOAL_X + GOAL_WIDTH) {
                     handleGoal('ai');
@@ -731,25 +501,42 @@
             const minDist = puck.radius + paddle.radius;
             
             if (dist < minDist) {
-                // Collision response
+                // Normalize collision vector
                 const nx = dx / dist;
                 const ny = dy / dist;
                 
                 // Separate objects
                 const overlap = minDist - dist;
-                puck.x += nx * overlap * 0.5;
-                puck.y += ny * overlap * 0.5;
+                puck.x += nx * overlap;
+                puck.y += ny * overlap;
                 
-                // Apply bounce
-                const dot = (puck.vx - paddle.vx) * nx + (puck.vy - paddle.vy) * ny;
-                const bounce = 1.2;
+                // Relative velocity
+                const rvx = puck.vx - paddle.vx;
+                const rvy = puck.vy - paddle.vy;
                 
-                puck.vx = (puck.vx - (1 + bounce) * dot * nx) + paddle.vx * 0.5;
-                puck.vy = (puck.vy - (1 + bounce) * dot * ny) + paddle.vy * 0.5;
+                // Velocity along collision normal
+                const velAlongNormal = rvx * nx + rvy * ny;
                 
-                // Limit speed
+                // Don't resolve if objects moving apart
+                if (velAlongNormal > 0) return;
+                
+                // Restitution (bounciness)
+                const restitution = 1.15;
+                
+                // Calculate impulse
+                const j = -(1 + restitution) * velAlongNormal;
+                
+                // Apply impulse
+                puck.vx += j * nx;
+                puck.vy += j * ny;
+                
+                // Add paddle velocity for realistic hits
+                puck.vx += paddle.vx * 0.3;
+                puck.vy += paddle.vy * 0.3;
+                
+                // Cap max speed
                 const speed = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy);
-                const maxSpeed = 25;
+                const maxSpeed = 18;
                 if (speed > maxSpeed) {
                     puck.vx = (puck.vx / speed) * maxSpeed;
                     puck.vy = (puck.vy / speed) * maxSpeed;
@@ -771,87 +558,80 @@
             updateScoreDisplay();
             
             if (playerScore >= 7 || aiScore >= 7) {
-                setTimeout(showWinnerScreen, 1000);
+                setTimeout(showGameOver, 1500);
             } else {
                 setTimeout(servePuck, 1500);
             }
         }
         
         function updateAI() {
-            // Predict puck position
-            const predictX = puck.x + puck.vx * 10;
-            const predictY = puck.y + puck.vy * 10;
+            // Calculate where puck will be
+            const lookahead = 15;
+            const predictX = puck.x + puck.vx * lookahead;
+            const predictY = puck.y + puck.vy * lookahead;
             
-            let targetX = ai.x;
-            let targetY = ai.y;
+            let targetX, targetY;
             
-            // Defensive AI
+            // If puck coming toward AI
             if (puck.vy < 0 && puck.y < HEIGHT / 2) {
-                // Puck coming toward AI - intercept
-                targetX = predictX;
-                targetY = Math.max(ai.radius + 30, Math.min(HEIGHT / 3, predictY - 50));
+                // Intercept
+                targetX = Math.max(80, Math.min(WIDTH - 80, predictX));
+                targetY = Math.max(60, Math.min(240, predictY - 40));
             } else {
-                // Return to defensive position
+                // Return to center
                 targetX = WIDTH / 2;
                 targetY = 100;
             }
             
-            // Smooth movement
+            // Smooth AI movement
+            const aiSpeed = 0.15;
             const dx = targetX - ai.x;
             const dy = targetY - ai.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
             
-            if (dist > 5) {
-                ai.vx = (dx / dist) * ai.speed;
-                ai.vy = (dy / dist) * ai.speed;
-                
-                ai.x += ai.vx;
-                ai.y += ai.vy;
-            }
+            ai.vx = dx * aiSpeed;
+            ai.vy = dy * aiSpeed;
             
-            // Keep AI in bounds
-            const minX = ai.radius + 20;
-            const maxX = WIDTH - ai.radius - 20;
-            const minY = ai.radius + 20;
-            const maxY = HEIGHT / 2 - ai.radius - 20;
+            ai.x += ai.vx;
+            ai.y += ai.vy;
             
-            ai.x = Math.max(minX, Math.min(maxX, ai.x));
-            ai.y = Math.max(minY, Math.min(maxY, ai.y));
+            // Keep in bounds
+            ai.x = Math.max(ai.radius + 10, Math.min(WIDTH - ai.radius - 10, ai.x));
+            ai.y = Math.max(ai.radius + 10, Math.min(HEIGHT / 2 - ai.radius - 10, ai.y));
         }
         
         function draw() {
-            // Clear canvas
+            // Clear
             ctx.fillStyle = '#1a1f3a';
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             
-            // Draw center line
+            // Center line
             ctx.strokeStyle = '#00d4ff';
-            ctx.lineWidth = 4;
-            ctx.setLineDash([20, 15]);
+            ctx.lineWidth = 3;
+            ctx.setLineDash([15, 15]);
             ctx.beginPath();
             ctx.moveTo(0, HEIGHT / 2);
             ctx.lineTo(WIDTH, HEIGHT / 2);
             ctx.stroke();
             ctx.setLineDash([]);
             
-            // Draw center circle
+            // Center circle
             ctx.beginPath();
-            ctx.arc(WIDTH / 2, HEIGHT / 2, Math.min(80, WIDTH / 10), 0, Math.PI * 2);
+            ctx.arc(WIDTH / 2, HEIGHT / 2, Math.min(60, WIDTH / 15), 0, Math.PI * 2);
             ctx.stroke();
             
-            // Draw goals
-            ctx.fillStyle = 'rgba(255, 50, 50, 0.3)';
-            ctx.fillRect(GOAL_X, 0, GOAL_WIDTH, 15);
+            // Goals
+            ctx.fillStyle = 'rgba(255, 50, 50, 0.2)';
+            ctx.fillRect(GOAL_X, 0, GOAL_WIDTH, 10);
             ctx.strokeStyle = '#ff3366';
             ctx.lineWidth = 3;
-            ctx.strokeRect(GOAL_X, 0, GOAL_WIDTH, 15);
+            ctx.strokeRect(GOAL_X, 0, GOAL_WIDTH, 10);
             
-            ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
-            ctx.fillRect(GOAL_X, HEIGHT - 15, GOAL_WIDTH, 15);
+            ctx.fillStyle = 'rgba(0, 212, 255, 0.2)';
+            ctx.fillRect(GOAL_X, HEIGHT - 10, GOAL_WIDTH, 10);
             ctx.strokeStyle = '#00d4ff';
-            ctx.strokeRect(GOAL_X, HEIGHT - 15, GOAL_WIDTH, 15);
+            ctx.strokeRect(GOAL_X, HEIGHT - 10, GOAL_WIDTH, 10);
             
-            // Draw puck
+            // Puck
             ctx.fillStyle = '#ffffff';
             ctx.shadowBlur = 20;
             ctx.shadowColor = '#ffffff';
@@ -860,7 +640,7 @@
             ctx.fill();
             ctx.shadowBlur = 0;
             
-            // Draw player paddle
+            // Player paddle
             ctx.fillStyle = '#00d4ff';
             ctx.beginPath();
             ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
@@ -869,7 +649,7 @@
             ctx.lineWidth = 3;
             ctx.stroke();
             
-            // Draw AI paddle
+            // AI paddle
             ctx.fillStyle = '#ff3366';
             ctx.beginPath();
             ctx.arc(ai.x, ai.y, ai.radius, 0, Math.PI * 2);
@@ -882,118 +662,30 @@
         function gameLoop() {
             if (!gameRunning) return;
             
-            updateGame();
+            updatePuck();
+            updateAI();
             draw();
             
             requestAnimationFrame(gameLoop);
         }
         
-        // Control functions for D-pad
-        function moveLeft() {
-            moveLeftActive = true;
-            moveRightActive = false;
-        }
-        
-        function moveRight() {
-            moveRightActive = true;
-            moveLeftActive = false;
-        }
-        
-        function moveUp() {
-            moveUpActive = true;
-            moveDownActive = false;
-        }
-        
-        function moveDown() {
-            moveDownActive = true;
-            moveUpActive = false;
-        }
-        
-        function stopHorizontal() {
-            moveLeftActive = false;
-            moveRightActive = false;
-        }
-        
-        function stopVertical() {
-            moveUpActive = false;
-            moveDownActive = false;
-        }
-        
-        // Direct touch controls
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-            
-            // Check if touching player paddle
-            const dx = x - player.x;
-            const dy = y - player.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist < player.radius * 2) {
-                isTouchingPaddle = true;
-                touchStartX = x;
-                touchStartY = y;
-            }
-        }, { passive: false });
-        
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            if (!isTouchingPaddle) return;
-            
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-            
-            // Move paddle to touch position
-            player.x = Math.max(player.radius + 20, Math.min(WIDTH - player.radius - 20, x));
-            player.y = Math.max(HEIGHT / 2 + player.radius + 20, Math.min(HEIGHT - player.radius - 20, y));
-            
-            // Calculate velocity for puck interaction
-            player.vx = (x - touchStartX) * 0.5;
-            player.vy = (y - touchStartY) * 0.5;
-            
-            touchStartX = x;
-            touchStartY = y;
-        }, { passive: false });
-        
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            isTouchingPaddle = false;
-            player.vx = 0;
-            player.vy = 0;
-        }, { passive: false });
-        
-        // Winner screen functions
-        function showWinnerScreen() {
+        function showGameOver() {
             gameRunning = false;
             
-            const winnerText = document.getElementById('winnerText');
-            const winnerScore = document.getElementById('winnerScore');
-            
-            if (playerScore >= 7) {
-                winnerText.textContent = '🎉 YOU WIN! 🎉';
-                winnerText.style.color = '#00d4ff';
-            } else {
-                winnerText.textContent = '🤖 AI WINS! 🤖';
-                winnerText.style.color = '#ff3366';
-            }
-            
-            winnerScore.textContent = `${playerScore} - ${aiScore}`;
-            document.getElementById('winnerScreen').style.display = 'flex';
+            const winner = playerScore >= 7 ? 'YOU WIN!' : 'AI WINS!';
+            document.getElementById('gameOverTitle').textContent = winner;
+            document.getElementById('gameOverScore').textContent = `${playerScore} - ${aiScore}`;
+            document.getElementById('gameOver').style.display = 'flex';
         }
         
         function playAgain() {
-            document.getElementById('winnerScreen').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
             
             playerScore = 0;
             aiScore = 0;
             updateScoreDisplay();
             
-            resetPositions();
+            initCanvas();
             servePuck();
             gameRunning = true;
             requestAnimationFrame(gameLoop);
@@ -1001,65 +693,96 @@
         
         function backToMenu() {
             gameRunning = false;
-            document.getElementById('winnerScreen').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('gameCanvas').style.display = 'none';
             document.getElementById('scoreboard').style.display = 'none';
-            document.getElementById('gameControls').style.display = 'none';
+            document.getElementById('controls').style.display = 'none';
             document.getElementById('instructions').style.display = 'none';
-            document.getElementById('mobileControls').style.display = 'none';
-            document.getElementById('fullscreenBtn').style.display = 'none';
-            document.getElementById('menu').style.display = 'flex';
+            document.getElementById('menu').style.display = 'block';
             
             bgMusic.pause();
             bgMusic.currentTime = 0;
         }
         
-        // Fullscreen toggle
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(e => {
-                    console.log('Fullscreen error:', e);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
+        // TOUCH CONTROLS - SIMPLE AND EFFECTIVE
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchActive = true;
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            
+            lastTouchX = touch.clientX - rect.left;
+            lastTouchY = touch.clientY - rect.top;
+            
+            // Move player paddle to touch position
+            player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, lastTouchX));
+            player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, lastTouchY));
+        }, { passive: false });
         
-        // Orientation check
-        function checkOrientation() {
-            const warning = document.getElementById('landscapeWarning');
-            if (window.innerHeight > window.innerWidth && window.innerWidth < 600) {
-                warning.style.display = 'flex';
-            } else {
-                warning.style.display = 'none';
-            }
-        }
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!touchActive) return;
+            
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const newX = touch.clientX - rect.left;
+            const newY = touch.clientY - rect.top;
+            
+            // Calculate velocity for momentum transfer
+            player.vx = (newX - lastTouchX) * 0.5;
+            player.vy = (newY - lastTouchY) * 0.5;
+            
+            // Move player paddle
+            player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, newX));
+            player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, newY));
+            
+            lastTouchX = newX;
+            lastTouchY = newY;
+        }, { passive: false });
         
-        // Event listeners for resize and orientation
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchActive = false;
+        }, { passive: false });
+        
+        canvas.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            touchActive = false;
+        }, { passive: false });
+        
+        // Mouse controls for desktop (optional)
+        canvas.addEventListener('mousemove', (e) => {
+            if (touchActive) return; // Don't interfere with touch
+            
+            const rect = canvas.getBoundingClientRect();
+            const newX = e.clientX - rect.left;
+            const newY = e.clientY - rect.top;
+            
+            // Calculate velocity for momentum transfer
+            player.vx = (newX - player.x) * 0.5;
+            player.vy = (newY - player.y) * 0.5;
+            
+            player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, newX));
+            player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, newY));
+        });
+        
+        // Handle window resize
         window.addEventListener('resize', () => {
-            updateCanvasSize();
-            checkOrientation();
             if (gameRunning) {
+                initCanvas();
                 draw();
             }
         });
         
-        window.addEventListener('orientationchange', checkOrientation);
-        
-        // Fullscreen change detection
-        document.addEventListener('fullscreenchange', () => {
-            isFullscreen = !!document.fullscreenElement;
-            updateCanvasSize();
-        });
-        
-        // Prevent default touch behaviors
-        document.addEventListener('touchmove', (e) => {
-            if (e.target === canvas || e.target.closest('.dpad-btn')) {
-                e.preventDefault();
-            }
+        // Prevent pull-to-refresh and other touch behaviors
+        document.addEventListener('touchmove', function(e) {
+            if (gameRunning) e.preventDefault();
         }, { passive: false });
         
         // Initialize on load
-        window.addEventListener('load', initGame);
+        window.addEventListener('load', () => {
+            initCanvas();
+        });
     </script>
 </body>
 </html>
