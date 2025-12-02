@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Air Hockey</title>
     <link rel="icon" type="image/png" href="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Favicon-Logo.png">
     <style>
@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            touch-action: manipulation;
         }
 
         body {
@@ -20,37 +21,43 @@
             align-items: center;
             min-height: 100vh;
             color: white;
+            overflow: hidden;
+            padding: 10px;
         }
 
         .container {
             text-align: center;
-            padding: 20px;
+            padding: 10px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            font-size: clamp(1.5em, 5vw, 2.5em);
+            margin-bottom: 15px;
             color: #00d4ff;
             text-shadow: 0 0 20px #00d4ff;
         }
 
         .menu {
             background: rgba(0, 212, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 15px;
             border: 2px solid #00d4ff;
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            width: 100%;
         }
 
         .menu h2 {
-            margin-bottom: 30px;
-            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-size: clamp(1.2em, 4vw, 1.8em);
         }
 
         .game-logo {
-            width: 200px;
+            width: min(150px, 40vw);
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
         }
 
@@ -58,17 +65,19 @@
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
             border: none;
-            padding: 20px 60px;
-            font-size: 1.4em;
+            padding: clamp(15px, 4vw, 20px) clamp(30px, 8vw, 60px);
+            font-size: clamp(1em, 4vw, 1.4em);
             border-radius: 12px;
             cursor: pointer;
-            margin: 20px;
+            margin: 15px 0;
             font-weight: bold;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+            width: 100%;
+            max-width: 300px;
         }
 
-        .menu button:hover {
+        .menu button:hover, .menu button:active {
             transform: translateY(-3px);
             box-shadow: 0 6px 25px rgba(0, 212, 255, 0.6);
         }
@@ -79,26 +88,42 @@
             box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
             display: none;
             background: #1a1f3a;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+            max-height: 70vh;
+            touch-action: none;
+        }
+
+        .game-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 10px 0;
         }
 
         .scoreboard {
             display: none;
             justify-content: space-around;
-            margin: 20px 0;
-            font-size: 2em;
+            margin: 15px 0;
+            font-size: clamp(1.2em, 5vw, 2em);
             font-weight: bold;
+            gap: 10px;
         }
 
         .score-item {
             background: rgba(0, 212, 255, 0.1);
-            padding: 15px 40px;
-            border-radius: 12px;
+            padding: 10px 20px;
+            border-radius: 10px;
             border: 2px solid #00d4ff;
+            flex: 1;
+            min-width: 0;
         }
 
         .controls {
-            margin-top: 20px;
+            margin-top: 15px;
             display: none;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .btn {
@@ -109,27 +134,128 @@
             font-size: 1em;
             border-radius: 10px;
             cursor: pointer;
-            margin: 5px;
             font-weight: bold;
             transition: all 0.3s;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
-        .btn:hover {
+        .btn:hover, .btn:active {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .instructions {
-            margin-top: 15px;
-            font-size: 1.1em;
+            margin-top: 10px;
+            font-size: clamp(0.9em, 3vw, 1.1em);
             color: #00d4ff;
+            padding: 0 10px;
         }
-        
+
         canvas {
             touch-action: none;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+        }
+
+        .touch-controls {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid #00d4ff;
+        }
+
+        .touch-area {
+            width: 100%;
+            height: 150px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 2px dashed #00d4ff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00d4ff;
+            font-size: 1.2em;
+            margin-top: 10px;
+            touch-action: none;
+        }
+
+        .mobile-controls {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid #00d4ff;
+        }
+
+        .control-btn {
+            background: rgba(0, 212, 255, 0.3);
+            color: white;
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .control-btn:active {
+            background: rgba(0, 212, 255, 0.5);
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                padding: 5px;
+            }
+            
+            .menu {
+                padding: 15px;
+            }
+            
+            .scoreboard {
+                font-size: 1.5em;
+            }
+            
+            .touch-controls, .mobile-controls {
+                display: block;
+            }
+            
+            .mobile-controls {
+                display: grid;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .scoreboard {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .score-item {
+                padding: 8px 15px;
+            }
+            
+            .mobile-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-btn {
+                padding: 12px;
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
@@ -157,12 +283,26 @@
             </div>
         </div>
 
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="game-wrapper">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <div class="touch-controls" id="touchControls">
+            <div class="instructions">
+                Touch and drag on the blue paddle to control it
+            </div>
+            <div class="touch-area" id="touchArea">
+                Touch Here to Control Paddle
+            </div>
+        </div>
+
+        <div class="mobile-controls" id="mobileControls">
+            <button class="control-btn" ontouchstart="moveLeft()" ontouchend="stopMove()">←</button>
+            <button class="control-btn" ontouchstart="moveUp()" ontouchend="stopMove()">↑</button>
+            <button class="control-btn" ontouchstart="moveRight()" ontouchend="stopMove()">→</button>
+        </div>
 
         <div class="controls" id="controls">
-            <div class="instructions">
-                Move your mouse or touch the blue paddle to control it
-            </div>
             <button class="btn" onclick="backToMenu()">Back to Menu</button>
         </div>
     </div>
@@ -171,10 +311,37 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
-        const WIDTH = 800;
-        const HEIGHT = 600;
+        // Set responsive dimensions
+        function setCanvasSize() {
+            const container = document.querySelector('.game-wrapper');
+            const maxWidth = container.clientWidth;
+            const maxHeight = Math.min(window.innerHeight * 0.7, 600);
+            
+            // Maintain 4:3 aspect ratio
+            let width = maxWidth;
+            let height = width * 0.75;
+            
+            if (height > maxHeight) {
+                height = maxHeight;
+                width = height / 0.75;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Update game dimensions
+            WIDTH = width;
+            HEIGHT = height;
+            GOAL_X = (WIDTH - GOAL_WIDTH) / 2;
+            
+            // Reset positions if game is running
+            if (gameRunning) {
+                resetPositions();
+            }
+        }
+        
         const GOAL_WIDTH = 200;
-        const GOAL_X = (WIDTH - GOAL_WIDTH) / 2;
+        let WIDTH, HEIGHT, GOAL_X;
         
         let gameRunning = false;
         let playerScore = 0;
@@ -188,8 +355,8 @@
         bgMusic.volume = 0.3;
         
         const puck = {
-            x: WIDTH / 2,
-            y: HEIGHT / 2,
+            x: 0,
+            y: 0,
             vx: 0,
             vy: 0,
             radius: 15,
@@ -197,38 +364,64 @@
         };
         
         const player = {
-            x: WIDTH / 2,
-            y: HEIGHT - 80,
-            vx: 0,
-            vy: 0,
-            radius: 35
-        };
-        
-        const ai = {
-            x: WIDTH / 2,
-            y: 80,
+            x: 0,
+            y: 0,
             vx: 0,
             vy: 0,
             radius: 35,
-            reactDelay: 0
+            speed: 8
         };
         
+        const ai = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            radius: 35,
+            speed: 6
+        };
+        
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let isTouching = false;
+        let touchX = 0;
+        let touchY = 0;
+        let moveLeftActive = false;
+        let moveRightActive = false;
+        let moveUpActive = false;
+        
         function startGame() {
+            setCanvasSize();
+            
             // Start background music
             bgMusic.play().catch(e => console.log('Audio play failed:', e));
             
             document.getElementById('menu').style.display = 'none';
             document.getElementById('gameCanvas').style.display = 'block';
             document.getElementById('scoreboard').style.display = 'flex';
-            document.getElementById('controls').style.display = 'block';
+            document.getElementById('controls').style.display = 'flex';
+            
+            if (isMobile) {
+                document.getElementById('touchControls').style.display = 'block';
+                document.getElementById('mobileControls').style.display = 'grid';
+            }
             
             playerScore = 0;
             aiScore = 0;
             frameCount = 0;
             updateScoreDisplay();
+            resetPositions();
             servePuck();
             gameRunning = true;
             requestAnimationFrame(gameLoop);
+        }
+        
+        function resetPositions() {
+            player.x = WIDTH / 2;
+            player.y = HEIGHT - 80;
+            ai.x = WIDTH / 2;
+            ai.y = 80;
+            puck.x = WIDTH / 2;
+            puck.y = HEIGHT / 2;
         }
         
         function servePuck() {
@@ -410,6 +603,32 @@
             ai.y = Math.max(ai.radius + 10, Math.min(HEIGHT / 2 - ai.radius - 10, ai.y));
         }
         
+        function updatePlayer() {
+            if (isMobile) {
+                // Handle mobile controls
+                if (moveLeftActive) {
+                    player.vx = -player.speed;
+                } else if (moveRightActive) {
+                    player.vx = player.speed;
+                } else {
+                    player.vx = 0;
+                }
+                
+                if (moveUpActive) {
+                    player.vy = -player.speed;
+                } else {
+                    player.vy = 0;
+                }
+                
+                player.x += player.vx;
+                player.y += player.vy;
+                
+                // Boundary checks
+                player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, player.x));
+                player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, player.y));
+            }
+        }
+        
         function draw() {
             // Clear
             ctx.fillStyle = '#1a1f3a';
@@ -473,6 +692,7 @@
         function gameLoop() {
             if (!gameRunning) return;
             
+            updatePlayer();
             updatePuck();
             updateAI();
             draw();
@@ -488,15 +708,15 @@
             
             const winner = playerScore >= 7 ? 'YOU WIN!' : 'AI WINS!';
             ctx.fillStyle = playerScore >= 7 ? '#00d4ff' : '#ff3366';
-            ctx.font = 'bold 60px Arial';
+            ctx.font = 'bold ' + Math.min(60, WIDTH / 10) + 'px Arial';
             ctx.textAlign = 'center';
             ctx.fillText(winner, WIDTH / 2, HEIGHT / 2 - 20);
             
             ctx.fillStyle = 'white';
-            ctx.font = 'bold 40px Arial';
+            ctx.font = 'bold ' + Math.min(40, WIDTH / 15) + 'px Arial';
             ctx.fillText(`${playerScore} - ${aiScore}`, WIDTH / 2, HEIGHT / 2 + 40);
             
-            ctx.font = '24px Arial';
+            ctx.font = Math.min(24, WIDTH / 25) + 'px Arial';
             ctx.fillText('Click "Back to Menu" to play again', WIDTH / 2, HEIGHT / 2 + 90);
         }
         
@@ -508,79 +728,89 @@
             document.getElementById('gameCanvas').style.display = 'none';
             document.getElementById('scoreboard').style.display = 'none';
             document.getElementById('controls').style.display = 'none';
+            document.getElementById('touchControls').style.display = 'none';
+            document.getElementById('mobileControls').style.display = 'none';
             document.getElementById('menu').style.display = 'block';
         }
         
-        // Mouse control
-        let lastMouseX = WIDTH / 2;
-        let lastMouseY = HEIGHT - 80;
-        
+        // Mouse control for desktop
         canvas.addEventListener('mousemove', (e) => {
+            if (isMobile) return;
+            
             const rect = canvas.getBoundingClientRect();
             const newX = e.clientX - rect.left;
             const newY = e.clientY - rect.top;
             
             // Calculate velocity for momentum transfer
-            player.vx = (newX - lastMouseX) * 0.5;
-            player.vy = (newY - lastMouseY) * 0.5;
+            player.vx = (newX - player.x) * 0.5;
+            player.vy = (newY - player.y) * 0.5;
             
             player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, newX));
             player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, newY));
-            
-            lastMouseX = newX;
-            lastMouseY = newY;
         });
         
-        // Touch control for mobile
-        let touchActive = false;
-        
+        // Touch control for mobile - direct paddle control
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            isTouching = true;
             const touch = e.touches[0];
             const rect = canvas.getBoundingClientRect();
             const touchX = touch.clientX - rect.left;
             const touchY = touch.clientY - rect.top;
             
-            // Check if touching the player paddle
-            const dx = touchX - player.x;
-            const dy = touchY - player.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist < player.radius + 20) {
-                touchActive = true;
-                lastMouseX = touchX;
-                lastMouseY = touchY;
-            }
+            // Move paddle to touch position
+            player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, touchX));
+            player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, touchY));
         }, { passive: false });
         
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
-            if (!touchActive) return;
+            if (!isTouching) return;
             
             const touch = e.touches[0];
             const rect = canvas.getBoundingClientRect();
             const newX = touch.clientX - rect.left;
             const newY = touch.clientY - rect.top;
             
-            // Calculate velocity for momentum transfer
-            player.vx = (newX - lastMouseX) * 0.5;
-            player.vy = (newY - lastMouseY) * 0.5;
-            
             player.x = Math.max(player.radius + 10, Math.min(WIDTH - player.radius - 10, newX));
             player.y = Math.max(HEIGHT / 2 + player.radius + 10, Math.min(HEIGHT - player.radius - 10, newY));
-            
-            lastMouseX = newX;
-            lastMouseY = newY;
         }, { passive: false });
         
         canvas.addEventListener('touchend', (e) => {
             e.preventDefault();
-            touchActive = false;
+            isTouching = false;
         }, { passive: false });
         
-        canvas.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            touchActive = false;
+        // Mobile control button functions
+        function moveLeft() {
+            moveLeftActive = true;
+        }
+        
+        function moveRight() {
+            moveRightActive = true;
+        }
+        
+        function moveUp() {
+            moveUpActive = true;
+        }
+        
+        function stopMove() {
+            moveLeftActive = false;
+            moveRightActive = false;
+            moveUpActive = false;
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (gameRunning) {
+                setCanvasSize();
+                draw();
+            }
+        });
+        
+        // Prevent pull-to-refresh on mobile
+        document.addEventListener('touchmove', function(e) {
+            if (gameRunning) e.preventDefault();
         }, { passive: false });
     </script>
 </body>
