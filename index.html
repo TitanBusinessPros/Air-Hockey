@@ -36,29 +36,101 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
-        /* Menu Styling */
+        /* Video Cutscene - FITS ALL SCREENS */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #cutsceneVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: black;
+        }
+
+        .countdown-overlay {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 1001;
+        }
+
+        .countdown {
+            font-size: 4em;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 40px;
+            border-radius: 15px;
+            display: inline-block;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .skip-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 212, 255, 0.3);
+            color: white;
+            border: 2px solid #00d4ff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .skip-btn:hover, .skip-btn:active {
+            background: rgba(0, 212, 255, 0.6);
+            transform: scale(0.95);
+        }
+
+        /* Menu Styling - RESPONSIVE */
         .menu {
             text-align: center;
             padding: 20px;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             background: rgba(0, 212, 255, 0.1);
             border-radius: 20px;
             border: 2px solid #00d4ff;
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            display: none;
+            margin: 20px;
         }
 
         h1 {
-            font-size: 2em;
+            font-size: clamp(1.8em, 5vw, 2.5em);
             margin-bottom: 20px;
             color: #00d4ff;
             text-shadow: 0 0 20px #00d4ff;
         }
 
         .game-logo {
-            width: 120px;
+            width: clamp(100px, 20vw, 150px);
             height: auto;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
@@ -66,15 +138,15 @@
 
         .menu h2 {
             margin-bottom: 30px;
-            font-size: 1.4em;
+            font-size: clamp(1.2em, 4vw, 1.5em);
         }
 
         .menu button {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
             border: none;
-            padding: 20px 40px;
-            font-size: 1.2em;
+            padding: clamp(15px, 4vw, 20px) clamp(30px, 8vw, 40px);
+            font-size: clamp(1.1em, 4vw, 1.3em);
             border-radius: 12px;
             cursor: pointer;
             margin: 20px 0;
@@ -82,61 +154,65 @@
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
             width: 100%;
+            max-width: 300px;
         }
 
-        .menu button:active {
+        .menu button:hover, .menu button:active {
             transform: scale(0.95);
             box-shadow: 0 2px 10px rgba(0, 212, 255, 0.6);
         }
 
-        /* Game Canvas - FULLSCREEN */
+        /* Game Canvas - FULLSCREEN RESPONSIVE */
         #gameCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: #1a1f3a;
             display: none;
             touch-action: none;
         }
 
-        /* Scoreboard - Always visible during game */
+        /* Scoreboard - RESPONSIVE */
         .scoreboard {
             display: none;
             justify-content: space-around;
             width: 100%;
-            padding: 15px 20px;
+            padding: clamp(10px, 3vw, 15px) clamp(15px, 4vw, 20px);
             position: fixed;
             top: 0;
             left: 0;
             z-index: 10;
             background: rgba(10, 14, 39, 0.8);
             backdrop-filter: blur(5px);
+            box-sizing: border-box;
         }
 
         .score-item {
             background: rgba(0, 212, 255, 0.2);
-            padding: 12px 25px;
+            padding: clamp(8px, 2vw, 12px) clamp(15px, 4vw, 25px);
             border-radius: 12px;
             border: 2px solid #00d4ff;
             text-align: center;
-            font-size: 1.5em;
+            font-size: clamp(1.2em, 4vw, 1.8em);
             font-weight: bold;
-            min-width: 100px;
+            min-width: clamp(80px, 25vw, 120px);
+            flex: 1;
+            margin: 0 5px;
         }
 
         .score-label {
-            font-size: 0.7em;
+            font-size: clamp(0.6em, 2vw, 0.8em);
             color: #00d4ff;
             margin-bottom: 5px;
         }
 
-        /* Controls */
+        /* Controls - RESPONSIVE */
         .controls {
             display: none;
             position: fixed;
-            bottom: 20px;
+            bottom: clamp(15px, 4vw, 25px);
             left: 0;
             width: 100%;
             text-align: center;
@@ -147,190 +223,282 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
+            padding: clamp(12px, 3vw, 15px) clamp(25px, 6vw, 30px);
+            font-size: clamp(1em, 3vw, 1.2em);
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
             margin: 0 10px;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s;
         }
 
-        .btn:active {
+        .btn:hover, .btn:active {
             transform: scale(0.95);
         }
 
-        /* Game Over Screen */
+        /* Game Over Screen - RESPONSIVE */
         .game-over {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.9);
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 20;
+            padding: 20px;
         }
 
         .game-over h2 {
-            font-size: 3em;
+            font-size: clamp(2em, 8vw, 3.5em);
             margin-bottom: 20px;
             text-align: center;
         }
 
         .game-over p {
-            font-size: 2em;
+            font-size: clamp(1.5em, 6vw, 2.5em);
             margin-bottom: 30px;
             color: #00d4ff;
         }
 
         .game-over-buttons {
             display: flex;
-            gap: 20px;
+            gap: clamp(15px, 4vw, 25px);
             flex-wrap: wrap;
             justify-content: center;
         }
 
-        /* Instructions */
+        /* Instructions - RESPONSIVE */
         .instructions {
             position: fixed;
-            bottom: 80px;
+            bottom: clamp(70px, 15vw, 100px);
             left: 0;
             width: 100%;
             text-align: center;
             color: #00d4ff;
-            font-size: 1em;
+            font-size: clamp(0.9em, 3vw, 1.1em);
             padding: 10px;
             z-index: 10;
             display: none;
             background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Loading Screen */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #0a0e27;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 212, 255, 0.3);
+            border-top: 5px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Desktop Optimizations */
+        @media (min-width: 768px) {
+            .menu {
+                max-width: 600px;
+                padding: 30px;
+            }
+            
+            .menu button {
+                max-width: 350px;
+            }
+            
+            .scoreboard {
+                padding: 15px 30px;
+            }
+            
+            .score-item {
+                min-width: 140px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .menu {
+                max-width: 700px;
+            }
+            
+            .score-item {
+                min-width: 160px;
+            }
+            
+            .instructions {
+                bottom: 120px;
+            }
         }
 
         /* Mobile Optimizations */
-        @media (max-width: 768px) {
+        @media (max-width: 767px) and (orientation: portrait) {
+            .countdown {
+                font-size: 3em;
+                padding: 15px 30px;
+            }
+            
+            .skip-btn {
+                top: 15px;
+                right: 15px;
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
             .menu {
                 width: 95%;
                 padding: 15px;
             }
             
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .score-item {
-                padding: 10px 20px;
-                min-width: 80px;
-                font-size: 1.3em;
-            }
-            
-            .game-over h2 {
+            .countdown {
                 font-size: 2.5em;
+                padding: 10px 20px;
             }
             
-            .game-over p {
-                font-size: 1.8em;
+            .skip-btn {
+                top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 0.8em;
             }
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5em;
-            }
-            
-            .menu h2 {
-                font-size: 1.2em;
-            }
-            
-            .menu button {
-                padding: 18px 30px;
-                font-size: 1.1em;
+        /* Landscape Optimizations */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .scoreboard {
+                padding: 5px 10px;
             }
             
             .score-item {
-                padding: 8px 15px;
+                padding: 5px 10px;
                 min-width: 70px;
-                font-size: 1.2em;
             }
             
-            .game-over h2 {
-                font-size: 2em;
+            .instructions {
+                bottom: 60px;
+                font-size: 0.9em;
+                padding: 5px;
             }
             
-            .game-over p {
-                font-size: 1.5em;
+            .controls {
+                bottom: 10px;
             }
             
             .btn {
-                padding: 12px 25px;
-                font-size: 1em;
+                padding: 8px 15px;
+                font-size: 0.9em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Main Menu -->
-        <div class="menu" id="menu">
-            <img src="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Favicon-Logo.png" alt="Air Hockey Logo" class="game-logo">
-            <h1>⚡ AIR HOCKEY ⚡</h1>
-            <h2>Touch to Play!</h2>
-            <button onclick="startGame()">START GAME</button>
-            <p style="margin-top: 20px; color: #00d4ff; font-size: 0.9em;">
-                Touch and drag the blue paddle to control it
-            </p>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div>Loading Game...</div>
+    </div>
+
+    <!-- Video Cutscene -->
+    <div class="video-container" id="videoContainer">
+        <video id="cutsceneVideo" playsinline webkit-playsinline preload="auto">
+            <source src="https://github.com/TitanBusinessPros/Zombie-Outbreak-Honolulu/raw/main/Ad-2-Zombie.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <button class="skip-btn" onclick="skipVideo()">Skip</button>
+        <div class="countdown-overlay">
+            <div class="countdown" id="countdown">7</div>
         </div>
+    </div>
 
-        <!-- Canvas -->
-        <canvas id="gameCanvas"></canvas>
-
-        <!-- Scoreboard -->
-        <div class="scoreboard" id="scoreboard">
-            <div class="score-item">
-                <div class="score-label">YOU</div>
-                <div id="score1">0</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">FIRST TO 7</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">AI</div>
-                <div id="score2">0</div>
-            </div>
-        </div>
-
-        <!-- Instructions -->
-        <div class="instructions" id="instructions">
+    <!-- Main Menu -->
+    <div class="menu" id="menu">
+        <img src="https://github.com/TitanBusinessPros/Air-Hockey/raw/main/Air%20Hockey%20Favicon-Logo.png" alt="Air Hockey Logo" class="game-logo">
+        <h1>⚡ AIR HOCKEY ⚡</h1>
+        <h2>Touch to Play!</h2>
+        <button onclick="startGame()">START GAME</button>
+        <p style="margin-top: 20px; color: #00d4ff; font-size: 0.9em;">
             Touch and drag the blue paddle to control it
-        </div>
+        </p>
+    </div>
 
-        <!-- Game Controls -->
-        <div class="controls" id="controls">
-            <button class="btn" onclick="backToMenu()">Back to Menu</button>
-        </div>
+    <!-- Canvas -->
+    <canvas id="gameCanvas"></canvas>
 
-        <!-- Game Over Screen -->
-        <div class="game-over" id="gameOver">
-            <h2 id="gameOverTitle">YOU WIN!</h2>
-            <p id="gameOverScore">7 - 0</p>
-            <div class="game-over-buttons">
-                <button class="btn" onclick="playAgain()">Play Again</button>
-                <button class="btn" onclick="backToMenu()">Main Menu</button>
-            </div>
+    <!-- Scoreboard -->
+    <div class="scoreboard" id="scoreboard">
+        <div class="score-item">
+            <div class="score-label">YOU</div>
+            <div id="score1">0</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">FIRST TO 7</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">AI</div>
+            <div id="score2">0</div>
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions" id="instructions">
+        Touch and drag the blue paddle to control it
+    </div>
+
+    <!-- Game Controls -->
+    <div class="controls" id="controls">
+        <button class="btn" onclick="backToMenu()">Back to Menu</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div class="game-over" id="gameOver">
+        <h2 id="gameOverTitle">YOU WIN!</h2>
+        <p id="gameOverScore">7 - 0</p>
+        <div class="game-over-buttons">
+            <button class="btn" onclick="playAgain()">Play Again</button>
+            <button class="btn" onclick="backToMenu()">Main Menu</button>
         </div>
     </div>
 
     <script>
+        // DOM Elements
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const video = document.getElementById('cutsceneVideo');
+        const countdownElement = document.getElementById('countdown');
+        const loadingScreen = document.getElementById('loading');
+        const videoContainer = document.getElementById('videoContainer');
+        const menu = document.getElementById('menu');
         
         // Game state
         let gameRunning = false;
         let playerScore = 0;
         let aiScore = 0;
         let waitingForReset = false;
+        let countdownInterval;
+        let videoSecondsLeft = 7;
         
         // Game dimensions - will be set to full screen
         let WIDTH, HEIGHT, GOAL_X;
@@ -373,7 +541,7 @@
         bgMusic.loop = true;
         bgMusic.volume = 0.3;
         
-        // Initialize canvas size
+        // Initialize canvas size - FIT TO SCREEN
         function initCanvas() {
             WIDTH = window.innerWidth;
             HEIGHT = window.innerHeight;
@@ -381,11 +549,14 @@
             canvas.width = WIDTH;
             canvas.height = HEIGHT;
             
-            GOAL_X = (WIDTH - GOAL_WIDTH) / 2;
+            // Adjust goal width based on screen size
+            const dynamicGoalWidth = Math.min(GOAL_WIDTH, WIDTH * 0.7);
+            GOAL_X = (WIDTH - dynamicGoalWidth) / 2;
             
-            // Adjust sizes based on screen
-            puck.radius = Math.max(15, Math.min(25, WIDTH / 30));
-            player.radius = Math.max(35, Math.min(50, WIDTH / 15));
+            // Adjust sizes based on screen - KEEP PROPORTIONS
+            const baseSize = Math.min(WIDTH, HEIGHT);
+            puck.radius = Math.max(15, Math.min(25, baseSize / 40));
+            player.radius = Math.max(35, Math.min(50, baseSize / 20));
             ai.radius = player.radius;
             
             // Reset positions
@@ -397,6 +568,82 @@
             puck.y = HEIGHT / 2;
         }
         
+        // Video Cutscene Functions
+        function startVideoCutscene() {
+            videoSecondsLeft = 7;
+            countdownElement.textContent = videoSecondsLeft;
+            
+            // Reset video to start
+            video.currentTime = 0;
+            
+            // Try to autoplay the video
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Auto-play prevented");
+                    // If autoplay fails, show a play button
+                    showVideoPlayButton();
+                }).then(() => {
+                    startCountdown();
+                });
+            } else {
+                startCountdown();
+            }
+        }
+        
+        function startCountdown() {
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                videoSecondsLeft--;
+                countdownElement.textContent = videoSecondsLeft;
+                
+                if (videoSecondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    endVideoCutscene();
+                }
+            }, 1000);
+        }
+        
+        function endVideoCutscene() {
+            video.pause();
+            video.currentTime = 0;
+            videoContainer.style.display = 'none';
+            menu.style.display = 'block';
+        }
+        
+        function skipVideo() {
+            clearInterval(countdownInterval);
+            endVideoCutscene();
+        }
+        
+        function showVideoPlayButton() {
+            // Create a play button overlay
+            const playButton = document.createElement('button');
+            playButton.innerHTML = '▶ PLAY VIDEO';
+            playButton.style.position = 'absolute';
+            playButton.style.top = '50%';
+            playButton.style.left = '50%';
+            playButton.style.transform = 'translate(-50%, -50%)';
+            playButton.style.padding = '20px 40px';
+            playButton.style.fontSize = '1.5em';
+            playButton.style.background = 'rgba(0, 212, 255, 0.8)';
+            playButton.style.color = 'white';
+            playButton.style.border = 'none';
+            playButton.style.borderRadius = '15px';
+            playButton.style.cursor = 'pointer';
+            playButton.style.zIndex = '1002';
+            
+            playButton.onclick = function() {
+                video.play();
+                playButton.remove();
+                startCountdown();
+            };
+            
+            videoContainer.appendChild(playButton);
+        }
+        
+        // Game Functions
         function startGame() {
             // Initialize canvas
             initCanvas();
@@ -405,8 +652,8 @@
             bgMusic.play().catch(e => console.log('Audio play failed:', e));
             
             // Show game elements
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById('gameCanvas').style.display = 'block';
+            menu.style.display = 'none';
+            canvas.style.display = 'block';
             document.getElementById('scoreboard').style.display = 'flex';
             document.getElementById('controls').style.display = 'block';
             document.getElementById('instructions').style.display = 'block';
@@ -471,7 +718,9 @@
             
             // Top goal or wall
             if (puck.y - puck.radius < 0) {
-                if (puck.x > GOAL_X && puck.x < GOAL_X + GOAL_WIDTH) {
+                const goalWidth = Math.min(GOAL_WIDTH, WIDTH * 0.7);
+                const goalX = (WIDTH - goalWidth) / 2;
+                if (puck.x > goalX && puck.x < goalX + goalWidth) {
                     handleGoal('player');
                 } else {
                     puck.y = puck.radius;
@@ -481,7 +730,9 @@
             
             // Bottom goal or wall
             if (puck.y + puck.radius > HEIGHT) {
-                if (puck.x > GOAL_X && puck.x < GOAL_X + GOAL_WIDTH) {
+                const goalWidth = Math.min(GOAL_WIDTH, WIDTH * 0.7);
+                const goalX = (WIDTH - goalWidth) / 2;
+                if (puck.x > goalX && puck.x < goalX + goalWidth) {
                     handleGoal('ai');
                 } else {
                     puck.y = HEIGHT - puck.radius;
@@ -575,8 +826,8 @@
             // If puck coming toward AI
             if (puck.vy < 0 && puck.y < HEIGHT / 2) {
                 // Intercept
-                targetX = Math.max(80, Math.min(WIDTH - 80, predictX));
-                targetY = Math.max(60, Math.min(240, predictY - 40));
+                targetX = Math.max(ai.radius + 20, Math.min(WIDTH - ai.radius - 20, predictX));
+                targetY = Math.max(ai.radius + 20, Math.min(HEIGHT / 3, predictY - 50));
             } else {
                 // Return to center
                 targetX = WIDTH / 2;
@@ -614,22 +865,26 @@
             ctx.stroke();
             ctx.setLineDash([]);
             
-            // Center circle
+            // Center circle - size based on screen
+            const circleRadius = Math.min(80, WIDTH / 12, HEIGHT / 10);
             ctx.beginPath();
-            ctx.arc(WIDTH / 2, HEIGHT / 2, Math.min(60, WIDTH / 15), 0, Math.PI * 2);
+            ctx.arc(WIDTH / 2, HEIGHT / 2, circleRadius, 0, Math.PI * 2);
             ctx.stroke();
             
-            // Goals
+            // Goals - dynamic width
+            const goalWidth = Math.min(GOAL_WIDTH, WIDTH * 0.7);
+            const goalX = (WIDTH - goalWidth) / 2;
+            
             ctx.fillStyle = 'rgba(255, 50, 50, 0.2)';
-            ctx.fillRect(GOAL_X, 0, GOAL_WIDTH, 10);
+            ctx.fillRect(goalX, 0, goalWidth, 10);
             ctx.strokeStyle = '#ff3366';
             ctx.lineWidth = 3;
-            ctx.strokeRect(GOAL_X, 0, GOAL_WIDTH, 10);
+            ctx.strokeRect(goalX, 0, goalWidth, 10);
             
             ctx.fillStyle = 'rgba(0, 212, 255, 0.2)';
-            ctx.fillRect(GOAL_X, HEIGHT - 10, GOAL_WIDTH, 10);
+            ctx.fillRect(goalX, HEIGHT - 10, goalWidth, 10);
             ctx.strokeStyle = '#00d4ff';
-            ctx.strokeRect(GOAL_X, HEIGHT - 10, GOAL_WIDTH, 10);
+            ctx.strokeRect(goalX, HEIGHT - 10, goalWidth, 10);
             
             // Puck
             ctx.fillStyle = '#ffffff';
@@ -694,17 +949,17 @@
         function backToMenu() {
             gameRunning = false;
             document.getElementById('gameOver').style.display = 'none';
-            document.getElementById('gameCanvas').style.display = 'none';
+            canvas.style.display = 'none';
             document.getElementById('scoreboard').style.display = 'none';
             document.getElementById('controls').style.display = 'none';
             document.getElementById('instructions').style.display = 'none';
-            document.getElementById('menu').style.display = 'block';
+            menu.style.display = 'block';
             
             bgMusic.pause();
             bgMusic.currentTime = 0;
         }
         
-        // TOUCH CONTROLS - SIMPLE AND EFFECTIVE
+        // TOUCH CONTROLS
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             touchActive = true;
@@ -750,9 +1005,9 @@
             touchActive = false;
         }, { passive: false });
         
-        // Mouse controls for desktop (optional)
+        // Mouse controls for desktop
         canvas.addEventListener('mousemove', (e) => {
-            if (touchActive) return; // Don't interfere with touch
+            if (touchActive) return;
             
             const rect = canvas.getBoundingClientRect();
             const newX = e.clientX - rect.left;
@@ -779,9 +1034,26 @@
             if (gameRunning) e.preventDefault();
         }, { passive: false });
         
-        // Initialize on load
+        // Initialize everything when page loads
         window.addEventListener('load', () => {
+            // Hide loading screen after everything is loaded
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                // Start the video cutscene
+                startVideoCutscene();
+            }, 1000);
+            
+            // Initialize canvas for good measure
             initCanvas();
+            
+            // Set video event listeners
+            video.addEventListener('ended', () => {
+                clearInterval(countdownInterval);
+                endVideoCutscene();
+            });
+            
+            // Preload the video
+            video.load();
         });
     </script>
 </body>
